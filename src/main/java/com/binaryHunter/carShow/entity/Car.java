@@ -1,9 +1,6 @@
-package com.binaryHunter.carShow;
+package com.binaryHunter.carShow.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity //a class that represents a table in the database
 // @Table(name = "lovelyCarTable")   to change table name
@@ -15,23 +12,28 @@ public class Car {
   //AUTO changes strategy to the right database
   private Long id;
   private String make;
-  private String brand;
   private String model;
   private String color;
   private String registerNumber;
   private int year;
   private double price;
+  @ManyToOne(fetch = FetchType.EAGER) //many cars can have 1 owner //Eager will always fetch the date Owner no matter what.
+  // even when not needed
+  //Lazy is only when needed
+  @JoinColumn(name = "owner") //add owner column
+  private Owner owner;
 
   public Car() { //Hibernate will use this because @Entity says so
   }
 
-  public Car(String make, String model, String color, String registerNumber, int year, double price) {
+  public Car(String make, String model, String color, String registerNumber, int year, double price, Owner owner) {
     this.make = make;
     this.model = model;
     this.color = color;
     this.registerNumber = registerNumber;
     this.year = year;
     this.price = price;
+    this.owner = owner;
   }
 
   public Long getId() {
@@ -48,14 +50,6 @@ public class Car {
 
   public void setMake(String make) {
     this.make = make;
-  }
-
-  public String getBrand() {
-    return brand;
-  }
-
-  public void setBrand(String brand) {
-    this.brand = brand;
   }
 
   public String getModel() {
@@ -96,6 +90,14 @@ public class Car {
 
   public void setPrice(double price) {
     this.price = price;
+  }
+
+  public Owner getOwner() {
+    return owner;
+  }
+
+  public void setOwner(Owner owner) {
+    this.owner = owner;
   }
 
   @Override
