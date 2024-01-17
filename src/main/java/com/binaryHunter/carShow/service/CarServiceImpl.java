@@ -1,9 +1,11 @@
 package com.binaryHunter.carShow.service;
 
 import com.binaryHunter.carShow.entity.Car;
+import com.binaryHunter.carShow.exception.ResourceNotFoundException;
 import com.binaryHunter.carShow.repository.CarRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,12 +39,14 @@ public class CarServiceImpl implements CarService{
             // System.out.println("nothing is Present");
                 //String s = op.orElse("No such value")
                   //String s = op.orElseThrow();
-    Optional<Car> optionalCar = carRepository.findById(id); //.findAll and .findById returns an Optional
-    if (optionalCar.isPresent()) {
-      return optionalCar.get();
-    } else {
-      throw new EntityNotFoundException("Car with id " + id + " not found");
-    }
+//  ```  Optional<Car> optionalCar = carRepository.findById(id); //.findAll and .findById returns an Optional
+//       if (optionalCar.isPresent()) {
+//         return optionalCar.get();
+//       } else {
+//         throw new ResourceNotFoundException("Car with id " + id + " not found");
+//       } ```
+    return carRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Car with id " + id + " not found."));
   }
   //Optionals: is a container object used to represent a value that may or may not be present (null)
 
