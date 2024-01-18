@@ -2,8 +2,10 @@ package com.binaryHunter.carShow;
 
 import com.binaryHunter.carShow.entity.Car;
 import com.binaryHunter.carShow.entity.Owner;
+import com.binaryHunter.carShow.entity.User;
 import com.binaryHunter.carShow.repository.CarRepository;
 import com.binaryHunter.carShow.repository.OwnerRepository;
+import com.binaryHunter.carShow.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,9 @@ public class CarShowApplication implements CommandLineRunner /*implement this fo
 	private CarRepository carRepository; //only has access to the database // the repository
 	@Autowired
 	private OwnerRepository ownerRepository;
+	@Autowired
+	private UserRepository userRepository;
+
 private static final Logger logger = LoggerFactory.getLogger(CarShowApplication.class);
 	public static void main(String[] args) {
 		SpringApplication.run(CarShowApplication.class, args);
@@ -44,7 +49,12 @@ private static final Logger logger = LoggerFactory.getLogger(CarShowApplication.
 						new Car("Honda","Accord","White","HW-345",2024,57000, owner2)
 		);
 		carRepository.saveAll(cars);
+
+		userRepository.save(new User("user", "$2y$10$PLLTB027CFR064sTOaDP5uRgxIuKISInyLxdXlP0mHhYNU.mUzos2", "USER"));
+		userRepository.save(new User("admin","$2y$10$29G5NE8IvodVYfFjRmqQsuDIad8KrqkaHqCQNVzbgvcRQFG7.T9zC", "ADMIN" ));
+
 		carRepository.findAll().forEach(car -> logger.info(car.getMake() + " " + car.getModel()));
+		ownerRepository.findAll().forEach(ow -> logger.info(ow.getFirstName()));
 	}
 
 	// ORM is the (idea)
